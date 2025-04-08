@@ -1,0 +1,35 @@
+{
+  "name": "captcha-recognition-extension",
+  "description": "Captcha Recognition by LLM",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "@google/genai": "^0.7.0",
+    "little-toast": "^0.1.2",
+    "lucide-react": "^0.487.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.55.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.313",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "@types/webextension-polyfill": "^0.12.3",
+    "@wxt-dev/module-react": "^1.1.2",
+    "typescript": "^5.6.3",
+    "webextension-polyfill": "^0.12.0",
+    "wxt": "^0.20.0"
+  }
+}

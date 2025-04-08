@@ -1,0 +1,21 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.button {
+  background-color: hsl(221, 14%,calc(100% + 0%));
+  border-color: hsl(221, 14%,calc(86% + 0%));
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 0 .0625em .125em  rgba(51, 51, 51, 0.05);
+  color: rgb(46, 51, 61);
+  cursor: pointer;
+  font-weight: 500;
+  height: auto;
+  justify-content: center;
+  padding: 5px 11px;
+  text-align: center;
+  white-space: nowrap;
+}

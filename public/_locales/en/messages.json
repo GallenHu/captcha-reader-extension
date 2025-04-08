@@ -1,0 +1,26 @@
+{
+  "currentModel": {
+    "message": "Current model"
+  },
+  "notSet": {
+    "message": "Not set"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "provider": {
+    "message": "Model provider"
+  },
+  "model": {
+    "message": "Model ID"
+  },
+  "apiKey": {
+    "message": "API key"
+  },
+  "baseUrl": {
+    "message": "Base URL"
+  },
+  "save": {
+    "message": "Save"
+  }
+}

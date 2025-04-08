@@ -1,0 +1,26 @@
+{
+  "currentModel": {
+    "message": "当前使用的模型"
+  },
+  "notSet": {
+    "message": "未设置"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "provider": {
+    "message": "模型服务商"
+  },
+  "model": {
+    "message": "模型 ID"
+  },
+  "apiKey": {
+    "message": "API key"
+  },
+  "baseUrl": {
+    "message": "Base URL"
+  },
+  "save": {
+    "message": "保存"
+  }
+}
