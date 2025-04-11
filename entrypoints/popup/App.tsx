@@ -11,26 +11,9 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [model, setModel] = useState("");
   const [provider, setProvider] = useState("");
-  const [showOk, setShowOk] = useState(false);
   const [predicted, setPredicted] = useState<string[]>([]);
   const [showPredicted, setShowPredicted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setStorage("model", model);
-    setStorage("provider", provider);
-
-    setShowOk(true);
-
-    setTimeout(() => {
-      setShowOk(false);
-    }, 3000);
-  };
-
-  const handleChangeProvider = (value: string) => {
-    setProvider(value);
-  };
+  const [showErr, setShowErr] = useState("");
 
   useEffect(() => {
     addMessageListener((request, sender, sendResponse) => {
@@ -44,6 +27,9 @@ function App() {
         case MESSAGE_ACTION.PREDICTED:
           setPredicted(request.data);
           setShowPredicted(true);
+          break;
+        case MESSAGE_ACTION.SHOW_ERROR:
+          setShowErr(String(request.data));
           break;
         default:
           break;
@@ -66,9 +52,9 @@ function App() {
   const renderPredicted = () => {
     return (
       <div>
-        <div>预测结果</div>
+        <div>{chrome.i18n.getMessage("result")}</div>
 
-        <ul>
+        <ul style={{ padding: 0, margin: "10px 0 0" }}>
           {predicted.map((item) => (
             <li key={item}>{item}</li>
           ))}
@@ -85,13 +71,30 @@ function App() {
     }
   };
 
+  const renderSettingButton = () => {
+    return (
+      <button className="button" onClick={goOptionsPage}>
+        {chrome.i18n.getMessage("settings")}
+      </button>
+    );
+  };
+
+  const renderErrorMsg = () => {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <div>Error: {showErr}</div>
+        <div style={{ marginTop: "20px" }}>{renderSettingButton()}</div>
+      </div>
+    );
+  };
+
   const renderConfigure = () => {
     return (
       <div style={{ textAlign: "center" }}>
         <div>{chrome.i18n.getMessage("currentModel")}: </div>
 
         <div style={{ fontWeight: 500, fontSize: "16px" }}>
-          <span>{model || chrome.i18n.getMessage("notSet")}</span>
+          <span>{model || chrome.i18n.getMessage("notSet") + " !"}</span>
 
           {provider ? (
             <span style={{ marginLeft: "5px" }}>
@@ -104,16 +107,14 @@ function App() {
           Right-click the CAPTCHA image to start.
         </div>
 
-        <div style={{ marginTop: "20px" }}>
-          <button className="button" onClick={goOptionsPage}>
-            {chrome.i18n.getMessage("settings")}
-          </button>
-        </div>
+        <div style={{ marginTop: "20px" }}>{renderSettingButton()}</div>
       </div>
     );
   };
 
-  return loading
+  return showErr
+    ? renderErrorMsg()
+    : loading
     ? renderLoading()
     : showPredicted
     ? renderPredicted()

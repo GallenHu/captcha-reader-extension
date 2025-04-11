@@ -1,8 +1,8 @@
 import { getStorage, setStorage } from "../utils/storage.utils";
-import { Check, LoaderCircle } from "lucide-react";
 import { showToast } from "little-toast";
 import { useForm, SubmitHandler } from "react-hook-form";
 import "little-toast/dist/styles.css";
+import { STORAGE_KEY } from "../constants/storage";
 
 interface IFormInput {
   provider: string;
@@ -12,25 +12,54 @@ interface IFormInput {
 }
 
 export default function App() {
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      provider: "gemini",
-      model: "",
+      provider: "openai",
+      model: "gpt-4o-mini",
       apiKey: "",
-      baseUrl: "",
+      baseUrl: "https://api.openai.com/v1",
     },
   });
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     setStorage("provider", data.provider);
-    setStorage("model", data.model);
-    setStorage("apiKey", data.apiKey);
-    setStorage("baseUrl", data.baseUrl);
-    showToast("Success", { duration: 2000 });
+    setStorage(STORAGE_KEY.MODEL, data.model);
+    setStorage(STORAGE_KEY.API_KEY, data.apiKey);
+    setStorage(STORAGE_KEY.BASE_URL, data.baseUrl);
+    showToast("🎉 OK", { duration: 2000 });
+  };
+
+  const testConnection = async (e: Event) => {
+    e.preventDefault();
+
+    const values = getValues();
+    const { model, apiKey, baseUrl } = values;
+
+    if (!model || !apiKey || !baseUrl) {
+      return;
+    }
+
+    const res = await fetch(`${baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: "user", content: "Hello" }],
+      }),
+    });
+    const resJson = await res.json();
+    if (resJson.error) {
+      showToast(resJson.error.message);
+    } else {
+      onSubmit(values);
+    }
   };
 
   useEffect(() => {
-    getStorage("provider").then((val) => val && setValue("provider", val));
+    // getStorage("provider").then((val) => val && setValue("provider", val));
     getStorage("model").then((val) => val && setValue("model", val));
     getStorage("apiKey").then((val) => val && setValue("apiKey", val));
     getStorage("baseUrl").then((val) => val && setValue("baseUrl", val));
@@ -45,7 +74,6 @@ export default function App() {
           </label>
           <div className="control select is-small">
             <select id="provider" {...register("provider")}>
-              <option value="gemini">Gemini</option>
               <option value="openai">OpenAI</option>
             </select>
           </div>
@@ -96,9 +124,19 @@ export default function App() {
           </div>
         </div>
 
-        <button className="button is-link is-light">
-          {chrome.i18n.getMessage("save")}
-        </button>
+        <div>
+          <button
+            className="button is-small"
+            style={{ marginRight: "10px" }}
+            onClick={testConnection}
+          >
+            {chrome.i18n.getMessage("testConnection")}
+          </button>
+
+          <button type="submit" className="button is-small is-link is-light">
+            {chrome.i18n.getMessage("save")}
+          </button>
+        </div>
       </form>
     </div>
   );

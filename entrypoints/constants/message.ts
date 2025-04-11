@@ -4,4 +4,5 @@ export const MESSAGE_ACTION = {
   START_LOADING: "startLoading",
   STOP_LOADING: "stopLoading",
   PREDICTED: "predicted",
+  SHOW_ERROR: "showError",
 };

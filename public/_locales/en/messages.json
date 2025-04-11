@@ -22,5 +22,11 @@
   },
   "save": {
     "message": "Save"
+  },
+  "testConnection": {
+    "message": "Test Connection"
+  },
+  "result": {
+    "message": "Result"
   }
 }

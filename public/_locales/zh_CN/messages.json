@@ -22,5 +22,11 @@
   },
   "save": {
     "message": "保存"
+  },
+  "testConnection": {
+    "message": "测试"
+  },
+  "result": {
+    "message": "预测结果"
   }
 }
