@@ -128,7 +128,7 @@ export default function App() {
           <button
             className="button is-small"
             style={{ marginRight: "10px" }}
-            onClick={testConnection}
+            onClick={() => testConnection}
           >
             {chrome.i18n.getMessage("testConnection")}
           </button>
@@ -136,7 +136,21 @@ export default function App() {
           <button type="submit" className="button is-small is-link is-light">
             {chrome.i18n.getMessage("save")}
           </button>
+
+          <a
+            href="https://ai.google.dev/gemini-api/docs/openai"
+            target="_blank"
+            style={{
+              float: "right",
+              fontSize: "12px",
+              marginTop: "8px",
+            }}
+          >
+            How to use Gemini API?
+          </a>
         </div>
+
+        <div></div>
       </form>
     </div>
   );
