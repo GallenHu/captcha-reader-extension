@@ -1,6 +1,6 @@
 {
   "currentModel": {
-    "message": "Current model"
+    "message": "Model"
   },
   "notSet": {
     "message": "Not set"
@@ -26,7 +26,10 @@
   "testConnection": {
     "message": "Test Connection"
   },
-  "result": {
-    "message": "Result"
+  "predictedResults": {
+    "message": "Predicted Results"
+  },
+  "configureRequired": {
+    "message": "Configure Required"
   }
 }

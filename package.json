@@ -1,6 +1,6 @@
 {
   "name": "captcha-recognition-extension",
-  "description": "Captcha Recognition by LLM",
+  "description": "Captcha Reader: Identify text CAPTCHA through LLM",
   "private": true,
   "version": "0.0.0",
   "type": "module",

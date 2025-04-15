@@ -1,7 +1,18 @@
 # captcha-recognition-extension
 
-Captcha Recognition by LLM
+Captcha Reader: Identify text CAPTCHA through LLM.
 
-## test page
+## Screenshots
 
-https://service.zol.com.cn/user/login.php?type=reg
+- Select captcha image
+
+<img src="./docs/screenshot_1.png" alt="screenshot" width="600" />
+
+- Result
+
+<img src="./docs/screenshot_2.png" alt="screenshot" width="600" />
+
+## tested page
+
+- https://checkcoverage.apple.com/
+- https://v2ex.com/signin

@@ -6,6 +6,7 @@ import { getStorage, setStorage } from "../utils/storage.utils";
 import { Check, LoaderCircle } from "lucide-react";
 import { MESSAGE_ACTION } from "../constants/message";
 import browser, { addMessageListener } from "../utils/browser.utils";
+import CopyButton from "./CopyButton";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ function App() {
         case MESSAGE_ACTION.STOP_LOADING:
           setLoading(false);
           break;
-        case MESSAGE_ACTION.PREDICTED:
+        case MESSAGE_ACTION.SHOW_PREDICTED:
           setPredicted(request.data);
           setShowPredicted(true);
           break;
@@ -51,12 +52,26 @@ function App() {
 
   const renderPredicted = () => {
     return (
-      <div>
-        <div>{chrome.i18n.getMessage("result")}</div>
+      <div style={{ textAlign: "left", width: "150px" }}>
+        <div style={{ marginBottom: "10px" }}>
+          {chrome.i18n.getMessage("predictedResults")}:
+        </div>
 
-        <ul style={{ padding: 0, margin: "10px 0 0" }}>
+        <ul style={{ padding: 0 }}>
           {predicted.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item} style={{ marginBottom: "6px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>{item}</span>
+
+                <CopyButton copyText={item} />
+              </div>
+            </li>
           ))}
         </ul>
       </div>
@@ -91,10 +106,14 @@ function App() {
   const renderConfigure = () => {
     return (
       <div style={{ textAlign: "center" }}>
-        <div>{chrome.i18n.getMessage("currentModel")}: </div>
+        <div>
+          <span style={{ marginRight: "5px" }}>
+            {chrome.i18n.getMessage("currentModel")}:
+          </span>
 
-        <div style={{ fontWeight: 500, fontSize: "16px" }}>
-          <span>{model || chrome.i18n.getMessage("notSet") + " !"}</span>
+          <span style={{ fontWeight: 500, fontSize: "16px" }}>
+            {model || chrome.i18n.getMessage("notSet")}
+          </span>
 
           {provider ? (
             <span style={{ marginLeft: "5px" }}>
@@ -103,9 +122,11 @@ function App() {
           ) : null}
         </div>
 
-        <div style={{ color: "#aaa", fontSize: "12px", marginTop: "10px" }}>
-          Right-click the CAPTCHA image to start.
-        </div>
+        {model && (
+          <div style={{ color: "#aaa", fontSize: "12px", marginTop: "10px" }}>
+            Right-click the CAPTCHA image to start.
+          </div>
+        )}
 
         <div style={{ marginTop: "20px" }}>{renderSettingButton()}</div>
       </div>

@@ -1,12 +1,12 @@
 {
   "currentModel": {
-    "message": "当前使用的模型"
+    "message": "模型"
   },
   "notSet": {
     "message": "未设置"
   },
   "settings": {
-    "message": "设置"
+    "message": "配置"
   },
   "provider": {
     "message": "模型服务商"
@@ -26,7 +26,10 @@
   "testConnection": {
     "message": "测试"
   },
-  "result": {
+  "predictedResults": {
     "message": "预测结果"
+  },
+  "configureRequired": {
+    "message": "请先配置模型"
   }
 }
