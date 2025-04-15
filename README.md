@@ -1,6 +1,6 @@
-# captcha-recognition-extension
+# captcha-reader-extension
 
-Captcha Reader: Identify text CAPTCHA through LLM.
+AI Captcha Reader: Identify text CAPTCHA through LLM.
 
 ## Screenshots
 
