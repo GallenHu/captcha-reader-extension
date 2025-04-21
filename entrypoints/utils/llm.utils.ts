@@ -73,7 +73,10 @@ async function predictWithGemini(imgBase64: string, prompt: string) {
     },
   });
 
-  return response.text;
+  return {
+    content: response.text,
+    error: null,
+  };
 }
 
 async function predictWithOpenai(imgBase64: string, prompt: string) {
@@ -110,14 +113,29 @@ async function predictWithOpenai(imgBase64: string, prompt: string) {
   });
 
   try {
-    const response = await openai.chat.completions.create({
+    const completion = await openai.beta.chat.completions.parse({
       model,
       messages,
       response_format: zodResponseFormat(CaptchaList, "captcha_list"),
     });
 
-    return response.choices[0]?.message.content;
+    const resMessage = completion.choices[0].message
+
+    if (resMessage.refusal) {
+      return {
+        content: null,
+        error: resMessage.refusal,
+      };
+    } else {
+      return {
+        content: resMessage.parsed,
+        error: null,
+      };
+    }
   } catch (error) {
-    throw error;
+    return {
+      content: null,
+      error: error,
+    };
   }
 }

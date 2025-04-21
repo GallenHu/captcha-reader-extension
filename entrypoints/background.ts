@@ -98,21 +98,27 @@ async function handleReceivedBase64Image(dataUrl: string) {
 async function handleInvoke(dataUrl: string) {
   const res = await predict(dataUrl.replace(/^data:image\/[^;]+;base64,/, ""));
 
-  if (res) {
+  if (res.error) {
+    showErr(String(res.error));
+  } else {
+    const content = res.content || "";
     let arr: string[] = [];
+
+    // console.log('res', res);
+
     try {
-      const obj = JSON.parse(res);
+      const obj = typeof content === "string" ? JSON.parse(content) : content;
       arr = obj["texts"];
     } catch (err) {
-      if (typeof res === "string") {
-        if (res.includes("\n")) {
-          arr = res.split("\n");
-        } else if (res.includes("\r\n")) {
-          arr = res.split("\r\n");
-        } else if (res.includes("\r")) {
-          arr = res.split("\r");
+      if (typeof content === "string") {
+        if (content.includes("\n")) {
+          arr = content.split("\n");
+        } else if (content.includes("\r\n")) {
+          arr = content.split("\r\n");
+        } else if (content.includes("\r")) {
+          arr = content.split("\r");
         } else {
-          arr = [res];
+          arr = [content];
         }
       } else {
         arr = [];
@@ -120,8 +126,6 @@ async function handleInvoke(dataUrl: string) {
     }
 
     return arr;
-  } else {
-    showErr("Failed to get prediction.");
   }
 }
 
@@ -134,8 +138,12 @@ async function checkConfigure() {
 }
 
 async function openPopup() {
-  // https://github.com/karakeep-app/karakeep/blob/817eb58832a3e715e21892417b7624f4b1cf0d46/apps/browser-extension/src/background/background.ts#L77C13-L77C39
-  await browser.action.openPopup();
+  try {
+    // https://github.com/karakeep-app/karakeep/blob/817eb58832a3e715e21892417b7624f4b1cf0d46/apps/browser-extension/src/background/background.ts#L77C13-L77C39
+    await browser.action.openPopup();
+  } catch (err) {
+    console.error("openPopup err");
+  }
 }
 
 function showErr(msg: string) {
