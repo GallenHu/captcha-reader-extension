@@ -3,4 +3,4 @@ export const STORAGE_KEY = {
   MODEL: "model",
   PROVIDER: "provider",
   BASE_URL: "base_url",
-};
+} as const;

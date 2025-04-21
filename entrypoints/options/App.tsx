@@ -7,25 +7,25 @@ import { STORAGE_KEY } from "../constants/storage";
 interface IFormInput {
   provider: string;
   model: string;
-  apiKey: string;
-  baseUrl: string;
+  api_key: string;
+  base_url: string;
 }
 
 export default function App() {
-  const { register, handleSubmit, setValue, getValues } = useForm({
+  const { register, handleSubmit, setValue, getValues } = useForm<IFormInput>({
     defaultValues: {
-      provider: "openai",
-      model: "gpt-4o-mini",
-      apiKey: "",
-      baseUrl: "https://api.openai.com/v1",
+      [STORAGE_KEY.PROVIDER]: "openai",
+      [STORAGE_KEY.MODEL]: "gpt-4o-mini",
+      [STORAGE_KEY.API_KEY]: "",
+      [STORAGE_KEY.BASE_URL]: "https://api.openai.com/v1",
     },
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    setStorage("provider", data.provider);
-    setStorage(STORAGE_KEY.MODEL, data.model);
-    setStorage(STORAGE_KEY.API_KEY, data.apiKey);
-    setStorage(STORAGE_KEY.BASE_URL, data.baseUrl);
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    await setStorage(STORAGE_KEY.PROVIDER, data.provider);
+    await setStorage(STORAGE_KEY.MODEL, data.model);
+    await setStorage(STORAGE_KEY.API_KEY, data.api_key);
+    await setStorage(STORAGE_KEY.BASE_URL, data.base_url);
     showToast("🎉 OK", { duration: 2000 });
   };
 
@@ -33,17 +33,17 @@ export default function App() {
     e.preventDefault();
 
     const values = getValues();
-    const { model, apiKey, baseUrl } = values;
+    const { model, api_key, base_url } = values;
 
-    if (!model || !apiKey || !baseUrl) {
+    if (!model || !api_key || !base_url) {
       return;
     }
 
-    const res = await fetch(`${baseUrl}/chat/completions`, {
+    const res = await fetch(`${base_url}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${api_key}`,
       },
       body: JSON.stringify({
         model,
@@ -60,9 +60,16 @@ export default function App() {
 
   useEffect(() => {
     // getStorage("provider").then((val) => val && setValue("provider", val));
-    getStorage("model").then((val) => val && setValue("model", val));
-    getStorage("apiKey").then((val) => val && setValue("apiKey", val));
-    getStorage("baseUrl").then((val) => val && setValue("baseUrl", val));
+
+    getStorage(STORAGE_KEY.MODEL).then((modelVal) => {
+      modelVal && setValue(STORAGE_KEY.MODEL, modelVal);
+    });
+    getStorage(STORAGE_KEY.API_KEY).then((keyVal) => {
+      setValue(STORAGE_KEY.API_KEY, keyVal);
+    });
+    getStorage(STORAGE_KEY.BASE_URL).then((urlVal) => {
+      urlVal && setValue(STORAGE_KEY.BASE_URL, urlVal);
+    });
   }, []);
 
   return (
@@ -73,7 +80,7 @@ export default function App() {
             {chrome.i18n.getMessage("provider")}:
           </label>
           <div className="control select is-small">
-            <select id="provider" {...register("provider")}>
+            <select id="provider" {...register(STORAGE_KEY.PROVIDER)}>
               <option value="openai">OpenAI</option>
             </select>
           </div>
@@ -88,7 +95,7 @@ export default function App() {
               type="text"
               id="model"
               autoComplete="off"
-              {...register("model", { required: true, maxLength: 100 })}
+              {...register(STORAGE_KEY.MODEL, { required: true, maxLength: 100 })}
               className="input is-small"
             />
           </div>
@@ -103,7 +110,7 @@ export default function App() {
               type="password"
               id="apiKey"
               autoComplete="off"
-              {...register("apiKey", { required: true, maxLength: 100 })}
+              {...register(STORAGE_KEY.API_KEY, { required: true, maxLength: 100 })}
               className="input is-small"
             />
           </div>
@@ -118,7 +125,7 @@ export default function App() {
               type="text"
               id="baseUrl"
               autoComplete="off"
-              {...register("baseUrl", { required: true, maxLength: 200 })}
+              {...register(STORAGE_KEY.BASE_URL, { required: true, maxLength: 200 })}
               className="input is-small"
             />
           </div>
